@@ -1,0 +1,222 @@
+[23:49, 10/06/2024] +91 86189 96024: Write a docker image to print hello world in centos, alpine and ubuntu OS.
+[23:49, 10/06/2024] +91 86189 96024: Write a docker image to provision Ubuntu with git,  nginx, java17
+[23:49, 10/06/2024] +91 86189 96024: Write a docker image to provision alpine with git,  nginx, java17
+[23:49, 10/06/2024] +91 86189 96024: Write a docker image to provision centos with git,  nginx, java17
+
+
+Write a docker image to print hello world in centos, alpine and ubuntu OS.
+
+Centos
+
+FROM centos
+CMD echo "hello world"
+
+o/p-ubuntu $ docker build -t image1:centos .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  26.62kB
+Step 1/2 : FROM centos
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+ ---> 5d0da3dc9764
+Step 2/2 : CMD echo "hello world"
+ ---> Running in aa0d29671ea2
+Removing intermediate container aa0d29671ea2
+ ---> a1b5f741321d
+Successfully built a1b5f741321d
+Successfully tagged image1:centos
+ubuntu $ docker run -it image1:centos 
+hello world
+ubuntu $ 
+
+
+ubuntu:
+
+FROM ubuntu
+CMD echo "hello world"
+
+
+ubuntu $ docker build -t image2:ubuntu .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  27.14kB
+Step 1/2 : FROM ubuntu
+latest: Pulling from library/ubuntu
+00d679a470c4: Pull complete 
+Digest: sha256:e3f92abc0967a6c19d0dfa2d55838833e947b9d74edbcb0113e48535ad4be12a
+Status: Downloaded newer image for ubuntu:latest
+ ---> 17c0145030df
+Step 2/2 : CMD echo "hello world"
+ ---> Running in bf32986f3ce9
+Removing intermediate container bf32986f3ce9
+ ---> 3416904d85a7
+Successfully built 3416904d85a7
+Successfully tagged image2:ubuntu
+ubuntu $ 
+ubuntu $ docker run -it image2:ubuntu
+hello world
+ubuntu $ 
+
+alpine:
+
+FROM alpine
+CMD echo "hello world"
+
+ubuntu $ docker build -t image3:alpine .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  27.65kB
+Step 1/2 : FROM alpine
+latest: Pulling from library/alpine
+d25f557d7f31: Pull complete 
+Digest: sha256:77726ef6b57ddf65bb551896826ec38bc3e53f75cdde31354fbffb4f25238ebd
+Status: Downloaded newer image for alpine:latest
+ ---> 1d34ffeaf190
+Step 2/2 : CMD echo "hello world"
+ ---> Running in fc5968258040
+Removing intermediate container fc5968258040
+ ---> e03593a595c6
+Successfully built e03593a595c6
+Successfully tagged image3:alpine
+ubuntu $ docker run -it image3:alpine 
+hello world
+ubuntu $ 
+
+ubuntu $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image3       alpine    e03593a595c6   35 seconds ago   7.79MB
+image2       ubuntu    3416904d85a7   2 minutes ago    76.2MB
+image1       centos    a1b5f741321d   3 minutes ago    231MB
+
+
+Write a docker image to provision Ubuntu with git,  nginx, java17
+
+
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install git -y 
+RUN apt-get update
+RUN apt install nginx -y
+RUN apt-get update
+RUN apt install openjdk-17-jre-headless -y
+
+o/p:
+ubuntu $ docker build -t image4:ubuntugjn .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  28.67kB
+Step 1/7 : FROM ubuntu
+ ---> 17c0145030df
+Step 2/7 : RUN apt-get update
+ ---> Running in 6a9b378c6916
+Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [1
+done.
+Removing intermediate container a149a69ceb55
+ ---> c7730337bd7d
+Successfully built c7730337bd7d
+Successfully tagged image4:ubuntugjn
+
+ubuntu $ docker run -it image4:ubuntugjn /bin/bash
+root@fb804a616689:/# git --version
+git version 2.43.0
+root@fb804a616689:/# nginx -v
+nginx version: nginx/1.24.0 (Ubuntu)
+root@fb804a616689:/# java --version
+openjdk 17.0.11 2024-04-16
+OpenJDK Runtime Environment (build 17.0.11+9-Ubuntu-1)
+OpenJDK 64-Bit Server VM (build 17.0.11+9-Ubuntu-1, mixed mode, sharing)
+root@fb804a616689:/# 
+
+
+ubuntu $ docker run -it image5:alpinejgn sh        
+/ # 
+/ # git --version
+git version 2.45.2
+/ # java --version
+openjdk 17.0.11 2024-04-16
+OpenJDK Runtime Environment (build 17.0.11+9-alpine-r0)
+OpenJDK 64-Bit Server VM (build 17.0.11+9-alpine-r0, mixed mode, sharing)
+/ # nginx -v
+nginx version: nginx/1.26.1
+/ # 
+
+ Write a docker image to provision alpine with git,  nginx, java17
+
+FROM alpine
+RUN apk update 
+RUN apk add git
+RUN apk update 
+RUN apk add nginx
+RUN apk update
+RUN apk add openjdk17
+
+o/p:
+Executing ca-certificates-20240226-r0.trigger
+Executing java-common-0.5-r0.trigger
+OK: 297 MiB in 59 packages
+Removing intermediate container 8ab93fa7336f
+ ---> db7c0a20ab6a
+Successfully built db7c0a20ab6a
+Successfully tagged image5:alpinejgn
+
+
+
+Write a docker image to provision centos with git,  nginx, java17
+
+FROM centos
+RUN cd /etc/yum.repos.d/
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+RUN yum install git -y
+RUN yum update -y 
+RUN yum install nginx -y 
+RUN yum update -y 
+RUN  yum install java-1.8.0-openjdk -y 
+
+ubuntu $ docker build -t image6:centosjgn .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  27.14kB
+Step 1/9 : FROM centos
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+ ---> 5d0da3dc9764
+Step 2/9 : RUN cd /etc/yum.repos.d/
+ ---> Running in ca109157d1c1
+
+Complete!
+Removing intermediate container c7e6b7528d67
+ ---> a056d0092d2a
+Successfully built a056d0092d2a
+Successfully tagged image6:centosjgn
+ubuntu $ 
+ubuntu $ ubuntu $ docker run -it image6:centosjgn /bin/bash
+[root@ff9ea8845970 /]# git --version
+git version 2.27.0
+root@ff9ea8845970 /]# nginx -v
+nginx version: nginx/1.14.1
+[root@ff9ea8845970 /]# 
+[root@ff9ea8845970 /]# java -version
+openjdk version "1.8.0_312"
+OpenJDK Runtime Environment (build 1.8.0_312-b07)
+OpenJDK 64-Bit Server VM (build 25.312-b07, mixed mode)
+[root@ff9ea8845970 /]# 
+
+

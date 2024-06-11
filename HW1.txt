@@ -1,0 +1,214 @@
+case 1:
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install openjdk-17-jdk -y
+RUN apt-get update
+RUN apt install maven -y
+
+docker build -t image1 .
+
+O/P-ubuntu $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
+image1       latest    6db800f49059   About a minute ago   835MB
+
+case 2:Create a Docker image for a basic web server using Apache
+FROM ubuntu
+RUN apt-get update
+RUN apt install apache2 -y
+
+docker build -t image2 .
+o/p:ubuntu $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image2       latest    136f35bc6fa6   31 seconds ago   221MB
+
+case 3: Docker image for a Python  application and git
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install python3 -y 
+RUN apt-get update
+RUN apt install git -y
+
+
+docker build -t image3 .
+
+o/p:ubuntu $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image3       latest    f6f57e9881b6   25 seconds ago   237MB
+
+case 4: Docker image for a Node.js application
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install nodejs -y
+RUN apt-get update
+RUN apt install npm -y
+
+docker build -t image4 .
+
+o/p: REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image4       latest    5fdcdb2ede4a   25 seconds ago   959MB
+
+Case 5: Docker image to install alpine and nginx
+
+FROM ubuntu
+RUN apt-get update 
+RUN apt install alpine -y
+RUN apt-get update 
+RUN apt install nginx -y 
+
+docker build -t image5 .
+o/p- REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image5       latest    b5c5e4bde112   40 seconds ago   135MB
+
+case 6:Docker image for a PostgreSQL database
+FROM ubuntu
+RUN apt-get update 
+RUN apt install postgresql postgresql-contrib -y 
+
+docker build -t image6 .
+
+o/p-ubuntu $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
+image6       latest    5d77340a33e1   About a minute ago   508MB
+
+case 7:Docker image for a MongoDB instance and remove git
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y mongodb
+RUN apt-get update
+RUN apt remove git -y
+
+docker build -t image7 .
+
+
+
+case 8:Docker image for alpine
+FROM alpine
+RUN apk update
+RUN apk add nginx
+
+docker build -t image8 .
+
+o/p-REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image8       latest    21760bda0bde   7 seconds ago    11.6MB
+
+case 9: docker image for mysql
+
+FROM ubuntu
+RUN apt-get update
+RUN  apt install mysql-server -y
+
+docker build -t image9 .
+
+o/p:
+
+case 10: Docker image for PHP install and remove mysql
+
+FROM ubuntu
+RUN apt-get update
+RUN  apt install php -y
+RUN apt-get update
+RUN apt remove mysql -y
+
+docker build -t image10 .
+
+o/p:REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image10       latest    50e5d4ea84e1   33 seconds ago   727MB
+
+
+case 11:docker image for git version 1.24.3
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install git=2.25.1 -y
+
+docker build -t image11 .
+
+case 12:dokcer image to install openssh server
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install openssh-server -y
+
+docker build -t image12 .
+
+o/p-REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image12      latest    7b1cbac4a19d   20 seconds ago   243MB
+
+case 13: docker image to buid vlc media player
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install vlc -y
+
+docker build -t image13 .
+
+o/p-REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+image13      latest    39d69218e1ec   4 seconds ago    960MB
+
+case 14: docker image to build gimp and remove vlc 
+
+FROM unbuntu
+RUN apt-get update
+RUN apt install gimp -y
+RUN apt-get update
+RUN apt remove vlc -y
+
+docker build -t image14 .
+
+
+
+case 15: docker image to install firebox
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install firefox -y
+
+docker build -t image15 .
+
+case 16: docker image to install libreoffice
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install libreoffice -y
+
+docker build -t image16 .
+
+case 17: docker image to build htop
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install htop -y
+
+docker build -t image17 .
+
+case 18: docker image to isntall gparted
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install gparted -y
+
+docker build -t image18 .
+
+case 19: docker image to install neofetch and reomve gparted
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install neofetch -y 
+RUN apt-get update
+RUN apt remove gparted -y
+
+
+docker build -t image19 .
+
+case 20: docker image to install docker.io
+
+FROM ubuntu
+RUN apt-get update
+RUN apt install docker.io -y
+
+ docker build -t image20 .
+
+
