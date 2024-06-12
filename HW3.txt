@@ -31,6 +31,14 @@ Removing intermediate container 722d3542d004
 Successfully built 7bffa5a02fcd
 Successfully tagged fedora:teraformv1.0.1
 
+[root@05abd7d554be /]# terraform --version
+Terraform v1.8.5
+on linux_amd64
+[root@05abd7d554be /]# exit
+exit
+ubuntu $ docker images
+REPOSITORY   TAG              IMAGE ID       CREATED         SIZE
+fedora       teraformv1.0.1   7bffa5a02fcd   2 minutes ago   475MB
 
 
 packer:
@@ -51,6 +59,22 @@ Removing intermediate container ad2577ab2157
 Successfully built e28ca53b028c
 Successfully tagged fedora:packerv1.0.1
 ubuntu $ 
+
+
+ubuntu $ docker run -it fedora:packerv1.0.1 /bin/bash
+[root@b299632f01be /]# 
+[root@b299632f01be /]# packer --version
+Packer v1.11.0
+[root@b299632f01be /]# 
+
+ubuntu $ docker images
+REPOSITORY   TAG              IMAGE ID       CREATED              SIZE
+fedora       packerv1.0.1     e28ca53b028c   About a minute ago   389MB
+fedora       teraformv1.0.1   7bffa5a02fcd   5 minutes ago        475MB
+
+
+
+
 
 jenkins in redhat:
 
@@ -79,25 +103,4 @@ ubuntu $ docker images
 REPOSITORY                            TAG             IMAGE ID       CREATED         SIZE
 linux                                 jenkinsv1.0.2   1ba3110de3b9   4 minutes ago   1.03GB
 
-ubuntu $ docker run -it fedora:packerv1.0.1 /bin/bash
-[root@b299632f01be /]# 
-[root@b299632f01be /]# packer --version
-Packer v1.11.0
-[root@b299632f01be /]# 
-
-ubuntu $ docker images
-REPOSITORY   TAG              IMAGE ID       CREATED              SIZE
-fedora       packerv1.0.1     e28ca53b028c   About a minute ago   389MB
-fedora       teraformv1.0.1   7bffa5a02fcd   5 minutes ago        475MB
-
-
-
-[root@05abd7d554be /]# terraform --version
-Terraform v1.8.5
-on linux_amd64
-[root@05abd7d554be /]# exit
-exit
-ubuntu $ docker images
-REPOSITORY   TAG              IMAGE ID       CREATED         SIZE
-fedora       teraformv1.0.1   7bffa5a02fcd   2 minutes ago   475MB
 
