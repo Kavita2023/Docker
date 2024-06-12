@@ -1,0 +1,103 @@
+Home work:
+==========
+Create terraform docker file in fedora OS
+https://developer.hashicorp.com/terraform/install
+
+Create packer docker file in fedora OS
+  [[Same instruction as terraform, but terraform with packer]]
+
+Create a docker file for jenkins in redhat
+https://www.jenkins.io/doc/book/installing/linux/#red-hat-centos
+
+
+
+FROM fedora
+RUN dnf install -y dnf-plugins-core
+RUN dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+RUN dnf -y install terraform
+
+o/p:
+
+perl-parent-1:0.241-502.fc40.noarch                                           
+  perl-podlators-1:5.01-502.fc40.noarch                                         
+  perl-vars-1.05-506.fc40.noarch                                                
+  terraform-1.8.5-1.x86_64                                                      
+  util-linux-2.40-0.9.rc1.fc40.x86_64                                           
+  util-linux-core-2.40-0.9.rc1.fc40.x86_64                                      
+
+Complete!
+Removing intermediate container 722d3542d004
+ ---> 7bffa5a02fcd
+Successfully built 7bffa5a02fcd
+Successfully tagged fedora:teraformv1.0.1
+
+
+
+packer:
+
+FROM fedora
+RUN dnf install -y dnf-plugins-core
+RUN dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+RUN dnf -y install packer
+
+ Running scriptlet: packer-1.11.0-1.x86_64                                 2/2 
+
+Installed:
+  openssl-1:3.2.1-2.fc40.x86_64              packer-1.11.0-1.x86_64             
+
+Complete!
+Removing intermediate container ad2577ab2157
+ ---> e28ca53b028c
+Successfully built e28ca53b028c
+Successfully tagged fedora:packerv1.0.1
+ubuntu $ 
+
+jenkins in redhat:
+
+
+FROM registry.access.redhat.com/ubi8/ubi:8.1
+RUN yum update -y
+RUN yum install wget -y
+RUN wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+RUN rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+RUN yum update -y
+RUN yum install fontconfig java-17-openjdk -y
+RUN yum update -y
+RUN yum install jenkins -y
+
+o/p-docker build -t linux:jenkinsv1.0.2 .
+Successfully built 1ba3110de3b9
+Successfully tagged linux:jenkinsv1.0.2
+ubuntu $ 
+ubuntu $ 
+ubuntu $ docker run -it linux:jenkinsv1.0.2 /bin/bash
+[root@99c39b099cf8 /]# jenkins --version
+2.452.1
+[root@99c39b099cf8 /]# exit
+exit
+ubuntu $ docker images
+REPOSITORY                            TAG             IMAGE ID       CREATED         SIZE
+linux                                 jenkinsv1.0.2   1ba3110de3b9   4 minutes ago   1.03GB
+
+ubuntu $ docker run -it fedora:packerv1.0.1 /bin/bash
+[root@b299632f01be /]# 
+[root@b299632f01be /]# packer --version
+Packer v1.11.0
+[root@b299632f01be /]# 
+
+ubuntu $ docker images
+REPOSITORY   TAG              IMAGE ID       CREATED              SIZE
+fedora       packerv1.0.1     e28ca53b028c   About a minute ago   389MB
+fedora       teraformv1.0.1   7bffa5a02fcd   5 minutes ago        475MB
+
+
+
+[root@05abd7d554be /]# terraform --version
+Terraform v1.8.5
+on linux_amd64
+[root@05abd7d554be /]# exit
+exit
+ubuntu $ docker images
+REPOSITORY   TAG              IMAGE ID       CREATED         SIZE
+fedora       teraformv1.0.1   7bffa5a02fcd   2 minutes ago   475MB
+
