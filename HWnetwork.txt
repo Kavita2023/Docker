@@ -1,0 +1,102 @@
+1) Design network to connect 1000 devices.
+
+subnet- 255.255.0.0= 2^16=65536
+
+around -2^10=1024-2=1022
+
+xxxxxxxx.xxxxxxxx
+11111100.00000000
+
+255.255.252.0
+
+2)Design network to connect 20 devices.
+
+subnet -255.255.255.0= 2^8=256
+around=2^5=32-2=30
+
+xxxxxxxx
+11100000
+
+255.255.255.224
+
+3) Design network to connect 75000 device
+
+subnet-255.0.0.0=2^24=16777216
+around=2^17-2
+xxxxxxxx.xxxxxxxx.xxxxxxxx
+
+11111110.00000000.00000000
+
+255.254.0.0
+
+4) Design network to connect 5200 devices
+
+subnet- 255.255.0.0= 2^16=65636
+around=2^13-2
+
+xxxxxxxx.xxxxxxxx
+11100000.00000000
+
+255.224.0.0
+
+5)Design network to connect 25688543 devices
+subnet- 255.0.0.0= 2^24
+
+around- 2^22-2
+
+xxxxxxxx.xxxxxxxx.xxxxxxxx
+11000000.00000000.00000000
+
+255.192.0.0
+
+6) Design network to connect 500 devices
+
+subnet- 255.255.0.0 =2^16
+
+around=2^9-2
+
+xxxxxxxx.xxxxxxxx
+11111110.00000000
+
+255.255.254.0
+
+7) Design network to connect 544677547
+
+subnet-0.0.0.0=2^32
+around= 2^30 -2
+
+xxxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx
+11000000.00000000.00000000.00000000
+
+192.0.0.0
+
+8) Design network to connect 10 devices 
+
+subnet -255.255.255.0 -=2^8
+around-2^4-2
+
+xxxxxxxx
+11110000
+
+255.255.255.240
+
+9) Design network to connect 9000 devices
+
+subnet -255.255.0.0= 2^16
+around- 2^14-2
+
+xxxxxxxx.xxxxxxxx
+11000000.00000000
+
+255.255.192.0
+
+10) Design network to connect 507319 devices
+
+subnet- 255.0.0.0 =2^24
+around- 2^19-2
+
+xxxxxxxx.xxxxxxxx.xxxxxxxx
+11111000.00000000.00000000
+
+255.248.0.0
+
