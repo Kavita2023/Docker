@@ -1,0 +1,292 @@
+local provisioning:
+
+
+................................................
+
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.107.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+# Data source to get the network interface of the existing VM
+data "azurerm_network_interface" "mymaster1_nic" {
+  name                = "master1778_z1"  # Replace with the actual NIC name
+  resource_group_name = "mymaster1"  # Replace with your resource group name
+}
+
+# Null resource to execute local provisioning
+resource "null_resource" "local_provision" {
+  provisioner "local-exec" {
+    command = "echo 'VM mymaster1 has private IP: ${data.azurerm_network_interface.master1_nic.private_ip_address}'"
+  }
+
+  # Ensure the data source is read before executing the provisioner
+  depends_on = [data.azurerm_network_interface.mymaster1_nic]
+}
+
+
+o/p:
+
+ubuntu $ terraform validate
+Success! The configuration is valid.
+
+ubuntu $ 
+ubuntu $ 
+ubuntu $ terraform apply   
+data.azurerm_network_interface.mymaster1_nic: Reading...
+data.azurerm_network_interface.mymaster1_nic: Read complete after 0s [id=/subscriptions/774a7a93-f60b-4608-b5f0-874db570c7f8/resourceGroups/mymaster1/providers/Microsoft.Network/networkInterfaces/master1778_z1]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # null_resource.local_provision will be created
+  + resource "null_resource" "local_provision" {
+      + id = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+null_resource.local_provision: Creating...
+null_resource.local_provision: Provisioning with 'local-exec'...
+null_resource.local_provision (local-exec): Executing: ["/bin/sh" "-c" "echo 'VM mymaster1 has private IP: 10.0.0.4'"]
+null_resource.local_provision (local-exec): VM mymaster1 has private IP: 10.0.0.4
+null_resource.local_provision: Creation complete after 0s [id=2838617670416870645]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+ubuntu $ 
+ubuntu $ 
+.........................................................
+
+
+Remote provisioning :
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.107.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+# Data source to get information about the existing VM
+data "azurerm_virtual_machine" "master1" {
+  name                = "master1"
+  resource_group_name = "mymaster1"
+}
+
+# Remote-exec provisioner to install Python
+resource "null_resource" "install_python" {
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update",
+      "sudo apt install python3 -y"
+      # Add more commands as needed for your setup
+    ]
+
+    # Connection details for SSH into the VM
+    connection {
+      type     = "ssh"
+      host     = data.azurerm_virtual_machine.master1.public_ip_address
+      user     = "Kavita"         # Replace with your VM's SSH username
+      password = "Asdfghjkl@2024" # Replace with the path to your private SSH key
+    }
+  }
+
+  # Ensure the VM is fully created before running remote-exec
+  depends_on = [data.azurerm_virtual_machine.master1]
+}
+
+o/p-null_resource.install_python (remote-exec): Building dependency tree... 0%
+null_resource.install_python (remote-exec): Building dependency tree... 0%
+null_resource.install_python (remote-exec): Building dependency tree... 0%
+null_resource.install_python (remote-exec): Building dependency tree... 50%
+null_resource.install_python (remote-exec): Building dependency tree... 50%
+null_resource.install_python (remote-exec): Building dependency tree
+null_resource.install_python (remote-exec): Reading state information... 0%
+null_resource.install_python (remote-exec): Reading state information... 0%
+null_resource.install_python (remote-exec): Reading state information... Done
+null_resource.install_python (remote-exec): 2 packages can be upgraded. Run 'apt list --upgradable' to see them.
+null_resource.install_python (remote-exec): Reading package lists... 0%
+null_resource.install_python (remote-exec): Reading package lists... 100%
+null_resource.install_python (remote-exec): Reading package lists... Done
+null_resource.install_python (remote-exec): Building dependency tree... 0%
+null_resource.install_python (remote-exec): Building dependency tree... 0%
+null_resource.install_python (remote-exec): Building dependency tree... 50%
+null_resource.install_python (remote-exec): Building dependency tree... 50%
+null_resource.install_python (remote-exec): Building dependency tree
+null_resource.install_python (remote-exec): Reading state information... 0%
+null_resource.install_python (remote-exec): Reading state information... 0%
+null_resource.install_python (remote-exec): Reading state information... Done
+null_resource.install_python (remote-exec): python3 is already the newest version (3.8.2-0ubuntu2).
+null_resource.install_python (remote-exec): 0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+null_resource.install_python: Creation complete after 8s [id=3601387115082350060]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+[3]+  Killed                  terraform apply
+ubuntu $  
+
+root@master1:/home/Kavita# python3 -V
+Python 3.8.10
+root@master1:/home/Kavita#
+
+
+................................................
+
+3) count function:
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.108.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources1"
+  location = "West Europe"
+}
+
+resource "azurerm_virtual_network" "example" {
+  name                = "example-network1"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_subnet" "internal" {
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
+
+resource "azurerm_public_ip" "example" {
+  count               = 2
+  name                = "example-pip-${count.index}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  allocation_method   = "Dynamic"
+}
+
+resource "azurerm_network_interface" "example" {
+  count               = 2
+  name                = "example-nic-kiwi-${count.index}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.example[count.index].id
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "example" {
+  count               = 2
+  name                = "example-vm1-${count.index}"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  size                = "Standard_DS1_v2"
+  admin_username      = "adminuser"
+  admin_password      = "Password1234!"
+  disable_password_authentication = "false"
+  network_interface_ids = [
+    azurerm_network_interface.example[count.index].id,
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+  tags = {
+    Name = "web ${count.index}"
+  }
+}
+
+output "admin_username" {
+  value = azurerm_linux_virtual_machine.example[0].admin_username
+}
+
+output "admin_password" {
+  value     = azurerm_linux_virtual_machine.example[0].admin_password
+  sensitive = true
+}
+
+output "admin_username_instance_1" {
+  value = azurerm_linux_virtual_machine.example[1].admin_username
+}
+
+output "admin_password_instance_1" {
+  value     = azurerm_linux_virtual_machine.example[1].admin_password
+  sensitive = true
+}
+
+output "public_ip_addresses" {
+  value = [for pip in azurerm_public_ip.example : pip.ip_address]
+}
+
+o/p-Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+zurerm_linux_virtual_machine.example[0]: Creating...
+azurerm_linux_virtual_machine.example[1]: Creating...
+azurerm_linux_virtual_machine.example[0]: Still creating... [10s elapsed]
+azurerm_linux_virtual_machine.example[1]: Still creating... [10s elapsed]
+azurerm_linux_virtual_machine.example[0]: Still creating... [20s elapsed]
+azurerm_linux_virtual_machine.example[1]: Still creating... [20s elapsed]
+azurerm_linux_virtual_machine.example[0]: Creation complete after 21s [id=/subscriptions/774a7a93-f60b-4608-b5f0-874db570c7f8/resourceGroups/example-resources1/providers/Microsoft.Compute/virtualMachines/example-vm1-0]
+azurerm_linux_virtual_machine.example[1]: Creation complete after 21s [id=/subscriptions/774a7a93-f60b-4608-b5f0-874db570c7f8/resourceGroups/example-resources1/providers/Microsoft.Compute/virtualMachines/example-vm1-1]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+admin_password = <sensitive>
+admin_password_instance_1 = <sensitive>
+admin_username = "adminuser"
+admin_username_instance_1 = "adminuser"
+public_ip_addresses = [
+  "",
+  "",
+]
